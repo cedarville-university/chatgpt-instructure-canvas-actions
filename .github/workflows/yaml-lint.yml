@@ -1,5 +1,4 @@
 name: YAML Lint
-
 on:
   push:
     branches: [ main, develop ]
@@ -12,28 +11,24 @@ on:
       - '**.yml'
       - '**.yaml'
   workflow_dispatch:
-
 jobs:
   yaml-lint:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-        
-    - name: Install yamllint
-      run: pip install yamllint
-      
-    - name: Run YAML Lint
-      run: |
-        find . -type f \( -name "*.yml" -o -name "*.yaml" \) -not -path "./.git/*" | xargs yamllint -d relaxed
-        
-    - name: List files being linted
-      run: |
-        echo "YAML files found:"
-        find . -type f \( -name "*.yml" -o -name "*.yaml" \) -not -path "./.git/*"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Run YAML Lint
+        run: >
+          find . -type f \( -name "*.yml" -o -name "*.yaml" \)
+          -not -path "./.git/*" | xargs yamllint -d relaxed
+      - name: List files being linted
+        run: >
+          echo "YAML files found:";
+          find . -type f \( -name "*.yml" -o -name "*.yaml" \)
+          -not -path "./.git/*"
