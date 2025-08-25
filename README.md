@@ -6,7 +6,9 @@ This repository provides a **template for building custom GPTs that can directly
 
 ## Why Use This?
 
-Canvas provides great APIs, but you can't allow just any student to query them with an administrative API key. With this setup, you can enable students to:
+Canvas provides great APIs, but you can't allow just any student to query them with an administrative API key embedded in a Canvas GPT (in fact, doing this may make your CISO's head explode 🤯). 
+
+With this setup, you can enable students to:
 
 * Ask natural-language questions about courses, assignments, annoucements, schedules, syllabi and other course information.
 * Limit the resources a student or teacher can access by using Canvas's own OAuth authentication
