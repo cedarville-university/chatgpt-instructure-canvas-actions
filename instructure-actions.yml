@@ -6,7 +6,7 @@ info:
     assignments, quizzes, files, and more.
   version: 1.0.0
 servers:
-  - url: https://yourdomain.instructure.com/
+  - url: https://cedarville.instructure.com
     description: Canvas LMS Production Server
 paths:
   /api/v1/courses:
@@ -204,23 +204,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Grade"
-  /api/v1/courses/{course_id}/syllabus:
-    get:
-      summary: Get course syllabus
-      operationId: getSyllabus
-      parameters:
-        - name: course_id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Syllabus details
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Syllabus"
   /api/v1/courses/{course_id}/modules:
     get:
       summary: List modules
@@ -438,25 +421,6 @@ components:
         score:
           type: number
         grade:
-          type: string
-    Syllabus:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        account_id:
-          type: integer
-        start_at:
-          type: string
-          format: date-time
-        end_at:
-          type: string
-          format: date-time
-        syllabus_body:
-          type: string
-        syllabus_url:
           type: string
     Module:
       type: object
