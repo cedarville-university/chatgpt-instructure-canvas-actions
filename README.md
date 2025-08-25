@@ -1,5 +1,5 @@
 # ChatGPT Instructure Canvas Actions
-[![YAML Lint](https://github.com/cedarville-university/chatgpt-instructure-canvas-actions/actions/workflows/yaml-lint.yml/badge.svg)](https://github.com/cedarville-university/chatgpt-instructure-canvas-actions/actions/workflows/yaml-lint.yml)
+[![YAML Lint](https://github.com/cedarville-university/chatgpt-instructure-canvas-actions/actions/workflows/yaml-lint.yml/badge.svg?branch=main)](https://github.com/cedarville-university/chatgpt-instructure-canvas-actions/actions/workflows/yaml-lint.yml)
 
 This repository provides a **template for building custom GPTs that can directly interact with Instructure Canvas**. Think of it as a starter kit: you get a ready-made framework for connecting ChatGPT with your institution’s Canvas environment, so you can query data, take actions, and extend Canvas functionality with conversational AI.
 
