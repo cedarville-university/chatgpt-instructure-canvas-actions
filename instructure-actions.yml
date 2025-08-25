@@ -7,7 +7,7 @@ info:
     assignments, quizzes, files, and more.
   version: 1.0.0
 servers:
-  - url: https://cedarville.instructure.com
+  - url: https://yourdomain.instructure.com
     description: Canvas LMS Production Server
 paths:
   /api/v1/courses:
