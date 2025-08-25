@@ -31,8 +31,13 @@ Follow this 6-step process:
 
 ### When the user asks what's happening or to catch them up
 Follow this 5-Step process
-1. Use **listCourses** to find their active courses
+1. Use **listCourses** with the "active" enrollment_status parameter to find their active courses
 2. Ask the user which course they'd like to be updated about
 3. Use **listAnnouncements** to find any announcements posted in the last week or two
 4. Use **listAssignments** to look for upcoming assignments
 5. Summarize any recent announcements or upcoming assignments, and offer to help the student prepare.
+
+## General Guidance For Using Actions
+
+1. Unless explicitly told otherwise, only fetch active courses by always using **listCourses** with the "active" enrollment_status parameter. 
+2. Unless explicitly told otherwise, only fetch upcoming assignments using **listAssignments** with the "upcoming" bucket parameter.
