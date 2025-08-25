@@ -56,7 +56,48 @@ If you go to the Actions pane in your custom GPT, there's also a **Test** button
 ## Potential Problems
 
 1. Having mistakes in your YAML may cause authentication to break in odd and unpredictable ways. Having query parameters hard-coded in your API paths is a good example. It's not caught by the YAML linter built into the actions page, but it absolutely breaks authentication.
-1. If you don't enable the Developer key (or don't add the redirect URL, you'll get a message like "
+1. If you don't enable the Developer key (or don't add the callback URL), you'll get a message like "callback URL is not authorized"
+1. If you don't change the Servers>URL object in the YAML, the OAuth may appear to work, but subsequent API calls will fail. 
+
+## Adding New Actions
+If you have new API endpoints you'd like to add to these actions, there are three places you need to make changes: 
+1. Add a new object under `paths:` in the YAML document. Here's a simple example: 
+```yaml
+/api/v1/courses:
+    get:
+      summary: List courses
+      operationId: listCourses
+      responses:
+        "200":
+          description: A paginated list of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+```
+Make sure to include "operationId" as a property, to name the action for your custom GPT. 
+2. Add a new schema object, if necessary under Schemas.
+3. Add the name of the action (i.e. the operationId) into the [instructions](./instructions.md) with a description of how/when the GPT should use this action
+
+To add parameters, put them in a `parameters:` property in the YAML for that path: 
+```yaml
+paths:
+  /api/v1/courses:
+    get:
+      ...
+      parameters:
+        - in: query
+          name: enrollment_state
+          schema:
+            type: string
+          required: true
+          enum: [active, invited_or_pending, completed]
+          description: Filter courses on the enrollment state
+```
+I've found that LLM's are pretty useful for creating these YAML files, if explicitly told to model them off of Instructure's API documentation. You'll also need to explicitly tell the LLM to include the operationId property as that's not in the default OpenAPI spec for these kinds of documents.  
+ 
 ## Scopes
 
-No Information here about enabling scopes yet. If you know how scopes work in Canavs, please send us a PR. 
+No Information here about enabling scopes yet. If you know how scopes work in Canvas, please send us a PR. 
