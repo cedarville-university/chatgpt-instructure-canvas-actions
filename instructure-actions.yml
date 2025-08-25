@@ -1,0 +1,171 @@
+
+openapi: 3.1.0
+info:
+  title: Canvas LMS API
+  description: >
+    This is the API of the Canvas LMS, providing access to various resources such as accounts, courses, users,
+    assignments, quizzes, files, and more.
+  version: 1.0.0
+servers:
+  - url: https://cedarville.instructure.com
+    description: Canvas LMS Production Server
+paths:
+  /api/v1/courses:
+    get:
+      summary: List courses
+      operationId: listCourses
+      responses:
+        "200":
+          description: A paginated list of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+      parameters:
+        - in: query
+          name: enrollment_state
+          schema:
+            type: string
+          required: true
+          enum:
+            - active
+          description: Filter courses on the enrollment state
+  /api/v1/courses/{course_id}:
+    get:
+      summary: Get a single course
+      operationId: getCourse
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: include
+          schema:
+            type: string
+          required: true
+          enum:
+            - syllabus_body
+          description: Include specific information in response
+      responses:
+        "200":
+          description: Course details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+  /api/v1/courses/{course_id}/assignments:
+    get:
+      summary: List assignments
+      operationId: listAssignments
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: include
+          schema:
+            type: string
+          enum:
+            - submission
+            - all_dates
+          description: Include specific information in response
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+          description: How many assignments to get
+          default: 20
+          required: true
+        - in: query
+          name: search_term
+          schema:
+            type: string
+          description: filters assignments based on a search
+        - in: query
+          name: bucket
+          schema:
+            type: string
+            enum:
+              - past
+              - overdue
+              - undated
+              - ungraded
+              - unsubmitted
+              - upcoming
+              - future
+          description: filters assignments based on dates
+      responses:
+        "200":
+          description: A paginated list of assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Assignment"
+  /api/v1/courses/{course_id}/assignments/{assignment_id}:
+    get:
+      summary: Get a single assignment
+      operationId: getAssignment
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: assignment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Assignment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+components:
+  schemas:
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        account_id:
+          type: integer
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type: string
+          format: date-time
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        due_at:
+          type: string
+          format: date-time
+        points_possible:
+          type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
