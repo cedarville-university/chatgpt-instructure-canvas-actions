@@ -25,6 +25,15 @@ Back in your new custom GPT's actions Authentication page:
 ## Import YAML and Instructions
 
 Still in the Actions page of your custom GPT, copy the raw YAML from [instructure-actions.yml](./instructure-actions.yml) into the Schema field. 
+
+Edit the following object in the YAML: 
+
+```yaml
+servers:
+  - url: https://yourdomain.instructure.com
+```
+Change the URL to the correct URL for your Canvas tenant. 
+
 Ensure that each of the **path** objects shows up on their own line below the Schema field. 
 
 Click the back button to get out of the **Edit Actions** pane (back to the **Configure** tab of your custom GPT and copy the raw Markdown text from [instructions.md](./instructions.md) into the GPT's instructions field. 
