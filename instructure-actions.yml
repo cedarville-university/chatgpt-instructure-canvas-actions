@@ -1,4 +1,3 @@
-
 openapi: 3.1.0
 info:
   title: Canvas LMS API
@@ -29,8 +28,7 @@ paths:
           schema:
             type: string
           required: true
-          enum:
-            - active
+          enum: [active, invited_or_pending, completed]
           description: Filter courses on the enrollment state
   /api/v1/courses/{course_id}:
     get:
@@ -47,8 +45,7 @@ paths:
           schema:
             type: string
           required: true
-          enum:
-            - syllabus_body
+          enum: [syllabus_body]
           description: Include specific information in response
       responses:
         "200":
@@ -71,17 +68,8 @@ paths:
           name: include
           schema:
             type: string
-          enum:
-            - submission
-            - all_dates
+          enum: [submission, all_dates]
           description: Include specific information in response
-        - in: query
-          name: per_page
-          schema:
-            type: integer
-          description: How many assignments to get
-          default: 20
-          required: true
         - in: query
           name: search_term
           schema:
@@ -91,14 +79,7 @@ paths:
           name: bucket
           schema:
             type: string
-            enum:
-              - past
-              - overdue
-              - undated
-              - ungraded
-              - unsubmitted
-              - upcoming
-              - future
+            enum: [past, overdue, undated, ungraded, unsubmitted, upcoming, future]
           description: filters assignments based on dates
       responses:
         "200":
@@ -131,8 +112,258 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Assignment"
+  /api/v1/courses/{course_id}/quizzes:
+    get:
+      summary: List quizzes
+      operationId: listQuizzes
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A paginated list of quizzes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quiz"
+  /api/v1/courses/{course_id}/quizzes/{quiz_id}:
+    get:
+      summary: Get a single quiz
+      operationId: getQuiz
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: quiz_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Quiz details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+  /api/v1/courses/{course_id}/students/{student_id}/grades:
+    get:
+      summary: List grades for a student
+      operationId: listGrades
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: student_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of grades for the student
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Grade"
+  /api/v1/courses/{course_id}/students/{student_id}/grades/{grade_id}:
+    get:
+      summary: Get a single grade
+      operationId: getGrade
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: student_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: grade_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Grade details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Grade"
+  /api/v1/courses/{course_id}/modules:
+    get:
+      summary: List modules
+      operationId: listModules
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of modules in the course
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Module"
+  /api/v1/courses/{course_id}/modules/{module_id}:
+    get:
+      summary: Get a single module
+      operationId: getModule
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: module_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Module details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+  /api/v1/courses/{course_id}/files:
+    get:
+      tags:
+        - Files
+      summary: List files in course
+      description: Returns the paginated list of files for the course
+      operationId: listCourseFiles
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          description: ID of the course
+          schema:
+            type: integer
+        - name: content_types
+          in: query
+          description: Filter results by content-type
+          schema:
+            type: array
+            items:
+              type: string
+        - name: search_term
+          in: query
+          description: The partial name of the files to match and return
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+  /api/v1/courses/{course_id}/files/{id}:
+    get:
+      tags:
+        - Files
+      summary: Get course file by ID
+      operationId: getCourseFile
+      description: Returns the standard attachment json object for a course file
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          description: ID of the course
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: ID of the file
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: File object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+  /api/v1/announcements:
+    get:
+      operationId: listAnnouncements
+      tags:
+        - Announcements
+      summary: List announcements
+      description: |
+        Returns the paginated list of announcements for the given courses and date range. 
+        Note that a context_code field is added to the responses so you can tell which 
+        course each announcement belongs to.
+      parameters:
+        - name: context_codes
+          in: query
+          required: true
+          description: |
+            List of context_codes to retrieve announcements for (for example, course_123). 
+            Only courses are presently supported. The call will fail unless the caller has 
+            View Announcements permission in all listed courses.
+          schema:
+            type: array
+            items:
+              type: string
+              pattern: '^course_[0-9]+$'
+            example: ["course_123", "course_456"]  
+        - name: active_only
+          in: query
+          description: Only return active announcements that have been published. 
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: List of announcements (as DiscussionTopic objects with context_code added)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/DiscussionTopic'
+                    - type: object
+                      properties:
+                        context_code:
+                          type: string
+                          description: The context code indicating which course this announcement belongs to
+                          example: "course_123"
 components:
   schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        workflow_state:
+          type: string
     Course:
       type: object
       properties:
@@ -162,6 +393,247 @@ components:
           format: date-time
         points_possible:
           type: number
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        due_at:
+          type: string
+          format: date-time
+        points_possible:
+          type: number
+    Grade:
+      type: object
+      properties:
+        id:
+          type: integer
+        student_id:
+          type: integer
+        course_id:
+          type: integer
+        assignment_id:
+          type: integer
+        score:
+          type: number
+        grade:
+          type: string
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        unlock_at:
+          type: string
+          format: date-time
+        require_sequential_progress:
+          type: boolean
+        state:
+          type: string
+    File:
+      type: object
+      description: A File object represents a file attachment in Canvas
+      properties:
+        id:
+          type: integer
+        uuid:
+          type: string
+        folder_id:
+          type: integer
+        display_name:
+          type: string
+        filename:
+          type: string
+        content-type:
+          type: string
+        url:
+          type: string
+          format: uri
+        size:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        unlock_at:
+          type: string
+          format: date-time
+        locked:
+          type: boolean
+        hidden:
+          type: boolean
+        lock_at:
+          type: string
+          format: date-time
+        hidden_for_user:
+          type: boolean
+        visibility_level:
+          type: string
+          enum: [inherit, course, institution, public]
+        thumbnail_url:
+          type: string
+          format: uri
+        modified_at:
+          type: string
+          format: date-time
+        mime_class:
+          type: string
+        media_entry_id:
+          type: string
+        locked_for_user:
+          type: boolean
+        lock_info:
+          type: object
+        lock_explanation:
+          type: string
+        preview_url:
+          type: string
+          format: uri
+    DiscussionTopic:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+          nullable: true
+        html_url:
+          type: string
+          format: uri
+        posted_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_reply_at:
+          type: string
+          format: date-time
+          nullable: true
+        require_initial_post:
+          type: boolean
+          nullable: true
+        user_can_see_posts:
+          type: boolean
+          nullable: true
+        discussion_subentry_count:
+          type: integer
+        read_state:
+          type: string
+          enum: [read, unread]
+        unread_count:
+          type: integer
+        subscribed:
+          type: boolean
+          nullable: true
+        subscription_hold:
+          type: string
+          nullable: true
+          enum: [initial_post_required, not_in_group_set, not_in_group, topic_is_announcement]
+        assignment_id:
+          type: integer
+          nullable: true
+        delayed_post_at:
+          type: string
+          format: date-time
+          nullable: true
+        published:
+          type: boolean
+        lock_at:
+          type: string
+          format: date-time
+          nullable: true
+        locked:
+          type: boolean
+        pinned:
+          type: boolean
+        locked_for_user:
+          type: boolean
+        lock_info:
+          type: object
+          nullable: true
+        lock_explanation:
+          type: string
+          nullable: true
+        user_name:
+          type: string
+          nullable: true
+        topic_children:
+          type: array
+          nullable: true
+          items:
+            type: integer
+        group_topic_children:
+          type: array
+          nullable: true
+          items:
+            type: object
+        root_topic_id:
+          type: integer
+          nullable: true
+        podcast_url:
+          type: string
+          format: uri
+          nullable: true
+        discussion_type:
+          type: string
+          nullable: true
+          enum: [side_comment, threaded]
+        group_category_id:
+          type: integer
+          nullable: true
+        attachments:
+          type: array
+          nullable: true
+          items:
+            type: object
+        permissions:
+          type: object
+          nullable: true
+          properties:
+            attach:
+              type: boolean
+            update:
+              type: boolean  
+            reply:
+              type: boolean
+            delete:
+              type: boolean
+        allow_rating:
+          type: boolean
+          nullable: true
+        only_graders_can_rate:
+          type: boolean
+          nullable: true
+        sort_by_rating:
+          type: boolean
+          nullable: true
+        is_announcement:
+          type: boolean
+        workflow_state:
+          type: string
+          enum: [active, locked, deleted, unpublished]
+        author:
+          type: object
+          nullable: true
+        sections:
+          type: array
+          nullable: true
+          items:
+            type: object
+        sections_user_count:
+          type: integer
+          nullable: true
   securitySchemes:
     bearerAuth:
       type: http

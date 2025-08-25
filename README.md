@@ -73,7 +73,7 @@ Please follow the standard GitHub flow:
 
 ---
 
-
 ## Maintainers
 
 Maintained by **Cedarville University**. Contributions welcome from the community!
+
