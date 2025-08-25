@@ -1,71 +1,77 @@
-# ChatGPT Custom GPT Oauth Authentication Setup Instructions
+# ChatGPT Instructure Canvas Actions
 
-## Create a new GPT Action
-Set up a new GPT in ChatGPT by going to **My GPTs** and clicking **Create a New GPT** 
+This repository provides a **template for building custom GPTs that can directly interact with Instructure Canvas**. Think of it as a starter kit: you get a ready-made framework for connecting ChatGPT with your institution’s Canvas environment, so you can query data, take actions, and extend Canvas functionality with conversational AI.
 
-Set up a new action in your GPT by going to the **Configure** Tab and choosing **Create a new action**
+---
 
-Click the **⛭** icon next to the Authentication field, and choose OAuth. 
+## Why Use This?
 
-## Create a Canvas Developer Key
+Canvas provides great APIs, but you can't allow just any student to query them with an administrative API key. With this setup, you can enable students to:
 
-As a Instructure Canvas Admin, use [these instructions to create a Developer Key](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-add-a-developer-API-key-for-an-account/ta-p/259). Set the **Key Name** and **Owner Email** fields, and leve the rest blank/default for now 
+* Ask natural-language questions about courses, assignments, annoucements, schedules, syllabi and other course information.
+* Limit the resources a student or teacher can access by using Canvas's own OAuth authentication
+* Extend ChatGPT with endpoints specific to your institution’s use of Canvas.
 
-## Set up OAuth Authentication to Canvas
-Back in your new custom GPT's actions Authentication page:
-* Copy the Key ID froj the Details column (long number like 136680000000000591) into the **Client ID** field in your GPT action's Authentication window
-* Copy the Secret Key (long string of letters) into the **Client Secret** field in your GPT action's Authentication window
-* Set the Authorization URL: `https://yourdomain.instructure.com/login/oauth2/auth`
-* Set the Token URL: `https://yourdomain.instructure.com/login/oauth2/token` 
-  _(substitue your Canvas tenant's FQDN in place of **yourdomain.instructure.com**)_
-* Leave **Scope blank**, unless you are enforcing Scopes in your Canvas Developer Key (see [Scopes](#scopes))
-* Set **Token Exchange Method** to **Default (POST Request)**
-* Save the authentication parameters\
+This template makes it easier to bridge the gap between conversational AI and the Canvas LMS.
 
-## Import YAML and Instructions
+---
 
-Still in the Actions page of your custom GPT, copy the raw YAML from [instructure-actions.yml](./instructure-actions.yml) into the Schema field. 
+## Features
 
-Edit the following object in the YAML: 
+* Ready-to-use template for building ChatGPT actions.
+* Built-in support for **OAuth with Canvas**.
+* Easy to extend with additional Canvas API endpoints.
 
-```yaml
-servers:
-  - url: https://yourdomain.instructure.com
-```
-Change the URL to the correct URL for your Canvas tenant. 
+---
 
-Ensure that each of the **path** objects shows up on their own line below the Schema field. 
+## Getting Started
 
-Click the back button to get out of the **Edit Actions** pane (back to the **Configure** tab of your custom GPT and copy the raw Markdown text from [instructions.md](./instructions.md) into the GPT's instructions field. 
+### Prerequisites
 
-## Set up Callback URLs & Enable in Canvas
+* Admin access to an Instructure Canvas instance.
+* Access to a ChatGPT workspace where you can create custom GPTs with Actions
+* A GitHub account (to fork and contribute).
 
-Copy the Callback URL from the box below the actions area on **Configure** tab of your custom GPT. 
+### Setup
 
-Back in the Canvas Developer Keys page, edit your Developer Key, and add the Callback URL as a Redirect URL. It will look something like this: 
-`https://chat.openai.com/aip/g-b6c923exxxxxxxxxxxxxxxxxxxxxxxx/oauth/callback`
+1. Clone or fork this repo.
+2. Follow the [**Setup Instructions**](./setup.md) to connect your GPT to Canvas.
+3. Test the included sample endpoints.
+4. Start adding your own endpoints to expand functionality.
 
-For some backwards compatibility with other OpenAI domains, add some whitespace after the first URL, and add a version with the domain chatgpt.com:
-`https://chatgpt.com/aip/g-b6c923exxxxxxxxxxxxxxxxxxxxxxxx/oauth/callback`
-(note: this callback URL is specific to each custom GPT you create, but you can add as many callback URLs as you want, separated by whitespace characters.)
+---
 
-Save the Developer Key, and use the switch on the main Developer Keys page to enable it.
+## OAuth Setup
 
-## Try your first Chat
+Setting up OAuth is the trickiest part, so we’ve included detailed instructions here.
 
-A good starting place to test the functionality of this GPT action is the following chat: 
-`what courses am I in?`
+[**Setup Instructions**](./setup.md)
 
-ChatGPT should display a **login with yourdomain.instructure.com** button that will start the OAuth flow. 
+Once configured, your GPT will be able to securely interact with Canvas APIs on behalf of the user, using their own credentials.
 
-Once your OAuth flow is complete, the GPT should interact with your Canvas tenant's apis to display a list of courses. 
+---
 
-If you go to the Actions pane in your custom GPT, there's also a **Test** button next to each endpoint that will give you a debug output of how ChatGPT used the action, and what it returned. 
+## Contributing
 
-## Potential Problems
+We’d love for you to fork this repo and submit PRs! Contributions can include:
 
-1. Having mistakes in your YAML may cause authentication to break in odd and unpredictable ways. Having query parameters hard-coded in your API paths is a good example. It's not caught by the YAML linter built into the actions page, but it absolutely breaks authentication.
-1. If you don't enable the Developer key (or don't add the redirect URL, you'll get a message like "
-## Scopes
+* Adding new Canvas API endpoints.
+* Improving the OAuth instructions.
+* Enhancing the developer experience.
+* Sharing usage examples.
 
-No Information here about enabling scopes yet. If you know how scopes work in Canavs, please send us a PR. 
+Please follow the standard GitHub flow:
+
+1. Fork the repo.
+2. Create a feature branch.
+3. Test your new functionality in a Custom GPT
+4. Commit your changes.
+5. Open a Pull Request. 
+   (Include screenshots of the intended functionality working in your GPT.)
+
+---
+
+
+## Maintainers
+
+Maintained by **Cedarville University**. Contributions welcome from the community!
