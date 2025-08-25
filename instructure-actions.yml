@@ -2,8 +2,10 @@ openapi: 3.1.0
 info:
   title: Canvas LMS API
   description: >
-    This is the API of the Canvas LMS, providing access to various resources such as accounts, courses, users,
-    assignments, quizzes, files, and more.
+    This is the API of the Canvas LMS, providing
+    access to various resources such as accounts,
+    courses, users, assignments, quizzes, files,
+    and more.
   version: 1.0.0
 servers:
   - url: https://yourdomain.instructure.com
@@ -79,7 +81,14 @@ paths:
           name: bucket
           schema:
             type: string
-            enum: [past, overdue, undated, ungraded, unsubmitted, upcoming, future]
+            enum:
+              - past
+              - overdue
+              - undated
+              - ungraded
+              - unsubmitted
+              - upcoming
+              - future
           description: filters assignments based on dates
       responses:
         "200":
@@ -250,7 +259,9 @@ paths:
       tags:
         - Files
       summary: List files in course
-      description: Returns the paginated list of files for the course
+      description: >
+        Returns the paginated list of
+        files for the course
       operationId: listCourseFiles
       parameters:
         - name: course_id
@@ -268,7 +279,9 @@ paths:
               type: string
         - name: search_term
           in: query
-          description: The partial name of the files to match and return
+          description: >
+            The partial name of the files to
+            match and return
           schema:
             type: string
       responses:
@@ -286,7 +299,9 @@ paths:
         - Files
       summary: Get course file by ID
       operationId: getCourseFile
-      description: Returns the standard attachment json object for a course file
+      description: >
+        Returns the standard attachment
+        json object for a course file
       parameters:
         - name: course_id
           in: path
@@ -313,33 +328,41 @@ paths:
       tags:
         - Announcements
       summary: List announcements
-      description: |
-        Returns the paginated list of announcements for the given courses and date range. 
-        Note that a context_code field is added to the responses so you can tell which 
+      description: >
+        Returns the paginated list of announcements for
+        the given courses and date range.
+        Note that a context_code field is added to the
+        responses so you can tell which
         course each announcement belongs to.
       parameters:
         - name: context_codes
           in: query
           required: true
-          description: |
-            List of context_codes to retrieve announcements for (for example, course_123). 
-            Only courses are presently supported. The call will fail unless the caller has 
+          description: >
+            List of context_codes to retrieve
+            announcements for (for example, course_123).
+            Only courses are presently supported.
+            The call will fail unless the caller has
             View Announcements permission in all listed courses.
           schema:
             type: array
             items:
               type: string
               pattern: '^course_[0-9]+$'
-            example: ["course_123", "course_456"]  
+            example: ["course_123", "course_456"]
         - name: active_only
           in: query
-          description: Only return active announcements that have been published. 
+          description: >
+            Only return active announcements
+            that have been published.
           schema:
             type: boolean
             default: true
       responses:
         '200':
-          description: List of announcements (as DiscussionTopic objects with context_code added)
+          description: >
+            List of announcements (as DiscussionTopic
+            objects with context_code added)
           content:
             application/json:
               schema:
@@ -351,7 +374,9 @@ paths:
                       properties:
                         context_code:
                           type: string
-                          description: The context code indicating which course this announcement belongs to
+                          description: >
+                            The context code indicating which course
+                            this announcement belongs to
                           example: "course_123"
 components:
   schemas:
@@ -440,7 +465,9 @@ components:
           type: string
     File:
       type: object
-      description: A File object represents a file attachment in Canvas
+      description: >
+        A File object represents a
+        file attachment in Canvas
       properties:
         id:
           type: integer
@@ -539,7 +566,11 @@ components:
         subscription_hold:
           type: string
           nullable: true
-          enum: [initial_post_required, not_in_group_set, not_in_group, topic_is_announcement]
+          enum:
+            - initial_post_required
+            - not_in_group_set
+            - not_in_group
+            - topic_is_announcement
         assignment_id:
           type: integer
           nullable: true
@@ -604,7 +635,7 @@ components:
             attach:
               type: boolean
             update:
-              type: boolean  
+              type: boolean
             reply:
               type: boolean
             delete:
