@@ -29,6 +29,6 @@ jobs:
           -not -path "./.git/*" | xargs yamllint -d relaxed
       - name: List files being linted
         run: >
-          echo "YAML files found:"; 
+          echo "YAML files found:";
           find . -type f \( -name "*.yml" -o -name "*.yaml" \)
           -not -path "./.git/*"
