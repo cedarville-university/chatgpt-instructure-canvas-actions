@@ -97,6 +97,8 @@ paths:
           description: Filter courses on the enrollment state
 ```
 I've found that LLM's are pretty useful for creating these YAML files, if explicitly told to model them off of Instructure's API documentation. You'll also need to explicitly tell the LLM to include the operationId property as that's not in the default OpenAPI spec for these kinds of documents.  
+
+If you want to force a parameter into every call of a tool, use "required: true" and an enum with a single value. ChatGPT seems to be able to use these parameters reasonably well as long as they're defined in that enum. You could also try putting specific parameter selections in the instructions for the GPT so that it knows how and when to call them.
  
 ## Scopes
 
