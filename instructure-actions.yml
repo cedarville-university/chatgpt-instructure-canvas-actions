@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Canvas LMS API
   description: |
-    This is the API of the Canvas LMS, providing access to various 
+    This is the API of the Canvas LMS, providing access to various
     resources such as accounts, courses, users,
     assignments, quizzes, files, and more.
   version: 1.0.0
@@ -387,9 +387,9 @@ paths:
         - Announcements
       summary: List announcements
       description: |
-        Returns the paginated list of announcements for 
+        Returns the paginated list of announcements for
         the given courses and date range.
-        Note that a context_code field is added 
+        Note that a context_code field is added
         to the responses so you can tell which
         course each announcement belongs to.
       parameters:
@@ -397,9 +397,9 @@ paths:
           in: query
           required: true
           description: |
-            List of context_codes to retrieve announcements for 
+            List of context_codes to retrieve announcements for
             (for example, course_123).
-            Only courses are presently supported. 
+            Only courses are presently supported.
             The call will fail unless the caller has
             View Announcements permission in all listed courses.
           schema:
@@ -412,7 +412,7 @@ paths:
         - name: active_only
           in: query
           description: |
-            Only return active announcements 
+            Only return active announcements
             that have been published.
           schema:
             type: boolean
@@ -420,7 +420,7 @@ paths:
       responses:
         "200":
           description: | 
-            List of announcements (as DiscussionTopic 
+            List of announcements (as DiscussionTopic
             objects with context_code added)
           content:
             application/json:
@@ -434,7 +434,7 @@ paths:
                         context_code:
                           type: string
                           description: |
-                            The context code indicating which course 
+                            The context code indicating which course
                             this announcement belongs to
                           example: course_123
 components:
