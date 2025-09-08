@@ -296,7 +296,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Page"
-  /api/v1/courses/{course_id}/modules/{page_id}:
+  /api/v1/courses/{course_id}/pages/{page_id}:
     get:
       summary: Get a single page
       operationId: getPage
