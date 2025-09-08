@@ -1,14 +1,13 @@
 openapi: 3.1.0
 info:
   title: Canvas LMS API
-  description: >
-    This is the API of the Canvas LMS, providing
-    access to various resources such as accounts,
-    courses, users, assignments, quizzes, files,
-    and more.
+  description: |
+    This is the API of the Canvas LMS, providing access to various
+    resources such as accounts, courses, users,
+    assignments, quizzes, files, and more.
   version: 1.0.0
 servers:
-  - url: https://yourdomain.instructure.com
+  - url: https://cedarville.instructure.com
     description: Canvas LMS Production Server
 paths:
   /api/v1/courses:
@@ -30,7 +29,10 @@ paths:
           schema:
             type: string
           required: true
-          enum: [active, invited_or_pending, completed]
+          enum:
+            - active
+            - invited_or_pending
+            - completed
           description: Filter courses on the enrollment state
   /api/v1/courses/{course_id}:
     get:
@@ -47,7 +49,8 @@ paths:
           schema:
             type: string
           required: true
-          enum: [syllabus_body]
+          enum:
+            - syllabus_body
           description: Include specific information in response
       responses:
         "200":
@@ -70,7 +73,9 @@ paths:
           name: include
           schema:
             type: string
-          enum: [submission, all_dates]
+          enum:
+            - submission
+            - all_dates
           description: Include specific information in response
         - in: query
           name: search_term
@@ -254,14 +259,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Module"
+
+  /api/v1/courses/{course_id}/pages:
+    get:
+      summary: List pages
+      operationId: listPages
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of pages in the course
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Page"
+  /api/v1/courses/{course_id}/front_page:
+    get:
+      summary: Get Course Front page
+      operationId: getFrontPage
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: The front Page of the course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+  /api/v1/courses/{course_id}/pages/{page_id}:
+    get:
+      summary: Get a single page
+      operationId: getPage
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Page details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
   /api/v1/courses/{course_id}/files:
     get:
       tags:
         - Files
       summary: List files in course
-      description: >
-        Returns the paginated list of
-        files for the course
+      description: Returns the paginated list of files for the course
       operationId: listCourseFiles
       parameters:
         - name: course_id
@@ -279,29 +341,25 @@ paths:
               type: string
         - name: search_term
           in: query
-          description: >
-            The partial name of the files to
-            match and return
+          description: The partial name of the files to match and return
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: List of files
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/File'
+                  $ref: "#/components/schemas/File"
   /api/v1/courses/{course_id}/files/{id}:
     get:
       tags:
         - Files
       summary: Get course file by ID
       operationId: getCourseFile
-      description: >
-        Returns the standard attachment
-        json object for a course file
+      description: Returns the standard attachment json object for a course file
       parameters:
         - name: course_id
           in: path
@@ -316,31 +374,31 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: File object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/File'
+                $ref: "#/components/schemas/File"
   /api/v1/announcements:
     get:
       operationId: listAnnouncements
       tags:
         - Announcements
       summary: List announcements
-      description: >
+      description: |
         Returns the paginated list of announcements for
         the given courses and date range.
-        Note that a context_code field is added to the
-        responses so you can tell which
+        Note that a context_code field is added
+        to the responses so you can tell which
         course each announcement belongs to.
       parameters:
         - name: context_codes
           in: query
           required: true
-          description: >
-            List of context_codes to retrieve
-            announcements for (for example, course_123).
+          description: |
+            List of context_codes to retrieve announcements for
+            (for example, course_123).
             Only courses are presently supported.
             The call will fail unless the caller has
             View Announcements permission in all listed courses.
@@ -348,19 +406,20 @@ paths:
             type: array
             items:
               type: string
-              pattern: '^course_[0-9]+$'
-            example: ["course_123", "course_456"]
+            example:
+              - course_123
+              - course_456
         - name: active_only
           in: query
-          description: >
+          description: |
             Only return active announcements
             that have been published.
           schema:
             type: boolean
             default: true
       responses:
-        '200':
-          description: >
+        "200":
+          description: |
             List of announcements (as DiscussionTopic
             objects with context_code added)
           content:
@@ -369,15 +428,15 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - $ref: '#/components/schemas/DiscussionTopic'
+                    - $ref: "#/components/schemas/DiscussionTopic"
                     - type: object
                       properties:
                         context_code:
                           type: string
-                          description: >
+                          description: |
                             The context code indicating which course
                             this announcement belongs to
-                          example: "course_123"
+                          example: course_123
 components:
   schemas:
     Account:
@@ -463,11 +522,50 @@ components:
           type: boolean
         state:
           type: string
+    Page:
+      type: object
+      properties:
+        page_id:
+          type: integer
+        url:
+          type: string
+        title:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        editing_roles:
+          type: string
+        last_edited_by:
+          type: object
+          nullable: true
+        body:
+          type: string
+        published:
+          type: boolean
+        publish_at:
+          type: string
+          format: date-time
+        front_page:
+          type: boolean
+        locked_for_user:
+          type: boolean
+        lock_info:
+          type: object
+          nullable: true
+        lock_explanation:
+          type: string
+        editor:
+          type: string
+          enum:
+            - rce
+            - block_editor
     File:
       type: object
-      description: >
-        A File object represents a
-        file attachment in Canvas
+      description: A File object represents a file attachment in Canvas
       properties:
         id:
           type: integer
@@ -506,7 +604,11 @@ components:
           type: boolean
         visibility_level:
           type: string
-          enum: [inherit, course, institution, public]
+          enum:
+            - inherit
+            - course
+            - institution
+            - public
         thumbnail_url:
           type: string
           format: uri
@@ -557,7 +659,9 @@ components:
           type: integer
         read_state:
           type: string
-          enum: [read, unread]
+          enum:
+            - read
+            - unread
         unread_count:
           type: integer
         subscribed:
@@ -619,7 +723,9 @@ components:
         discussion_type:
           type: string
           nullable: true
-          enum: [side_comment, threaded]
+          enum:
+            - side_comment
+            - threaded
         group_category_id:
           type: integer
           nullable: true
@@ -653,7 +759,11 @@ components:
           type: boolean
         workflow_state:
           type: string
-          enum: [active, locked, deleted, unpublished]
+          enum:
+            - active
+            - locked
+            - deleted
+            - unpublished
         author:
           type: object
           nullable: true
