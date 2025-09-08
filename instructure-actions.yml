@@ -270,6 +270,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: search_term
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: A list of pages in the course
