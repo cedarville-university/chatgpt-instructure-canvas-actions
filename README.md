@@ -11,7 +11,7 @@ Canvas provides great APIs, but you can't allow just any student to query them w
 
 With this setup, you can enable students to:
 
-* Ask natural-language questions about courses, assignments, annoucements, schedules, syllabi and other course information.
+* Ask natural-language questions about courses, assignments, announcements, schedules, syllabi and other course information.
 * Limit the resources a student or teacher can access by using Canvas's own OAuth authentication
 * Extend ChatGPT with endpoints specific to your institution’s use of Canvas.
 
