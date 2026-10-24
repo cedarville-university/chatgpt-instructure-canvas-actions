@@ -8,15 +8,15 @@ Click the **⛭** icon next to the Authentication field, and choose OAuth.
 
 ## Create a Canvas Developer Key
 
-As a Instructure Canvas Admin, use [these instructions to create a Developer Key](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-add-a-developer-API-key-for-an-account/ta-p/259). Set the **Key Name** and **Owner Email** fields, and leve the rest blank/default for now 
+As an Instructure Canvas Admin, use [these instructions to create a Developer Key](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-add-a-developer-API-key-for-an-account/ta-p/259). Set the **Key Name** and **Owner Email** fields, and leave the rest blank/default for now 
 
 ## Set up OAuth Authentication to Canvas
 Back in your new custom GPT's actions Authentication page:
-* Copy the Key ID froj the Details column (long number like 136680000000000591) into the **Client ID** field in your GPT action's Authentication window
+* Copy the Key ID from the Details column (long number like 136680000000000591) into the **Client ID** field in your GPT action's Authentication window
 * Copy the Secret Key (long string of letters) into the **Client Secret** field in your GPT action's Authentication window
 * Set the Authorization URL: `https://yourdomain.instructure.com/login/oauth2/auth`
 * Set the Token URL: `https://yourdomain.instructure.com/login/oauth2/token` 
-  _(substitue your Canvas tenant's FQDN in place of **yourdomain.instructure.com**)_
+  _(substitute your Canvas tenant's FQDN in place of **yourdomain.instructure.com**)_
 * Leave **Scope blank**, unless you are enforcing Scopes in your Canvas Developer Key (see [Scopes](#scopes))
 * Set **Token Exchange Method** to **Default (POST Request)**
 * Save the authentication parameters\
@@ -64,8 +64,8 @@ If you go to the Actions pane in your custom GPT, there's also a **Test** button
 ## Potential Problems
 
 1. Having mistakes in your YAML may cause authentication to break in odd and unpredictable ways. Having query parameters hard-coded in your API paths is a good example. It's not caught by the YAML linter built into the actions page, but it absolutely breaks authentication.
-1. If you don't enable the Developer key (or don't add the redirect URL, you'll get a message like "
+1. If you don't enable the Developer key (or don't add the redirect URL), you'll get a message like "
 
 ## Scopes
 
-No Information here about enabling scopes yet. If you know how scopes work in Canavs, please send us a PR. 
+No Information here about enabling scopes yet. If you know how scopes work in Canvas, please send us a PR. 
